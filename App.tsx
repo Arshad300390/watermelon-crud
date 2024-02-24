@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -5,9 +7,10 @@
  * @format
  */
 
-import React from 'react';
+import React,{useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -24,6 +27,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import { observeWeights, Weight, saveWeight,LastWeights } from './data/helper';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -56,43 +61,73 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [data, setData] = useState();
+  // const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
+
+  const ShowData = async () => {
+  
+
+    (await LastWeights).map(weights => {
+      setData(weights.note);
+      console.log(weights.note)
+    })
+  }
+
+  const handleSavePress = async () => {
+    try{
+      await saveWeight({weight: "30", note: "slkdfj"});
+    }
+    catch(err){
+        console.error(err)
+    }
+   
+
+  }
+
+  // const backgroundStyle = {
+  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  // };
+
+  // return (
+  //   <SafeAreaView style={backgroundStyle}>
+  //     <StatusBar
+  //       barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+  //       backgroundColor={backgroundStyle.backgroundColor}
+  //     />
+  //     <ScrollView
+  //       contentInsetAdjustmentBehavior="automatic"
+  //       style={backgroundStyle}>
+  //       <Header />
+  //       <View
+  //         style={{
+  //           backgroundColor: isDarkMode ? Colors.black : Colors.white,
+  //         }}>
+  //         <Section title="Step One">
+  //           Edit <Text style={styles.highlight}>App.tsx</Text> to change this
+  //           screen and then come back to see your edits.
+  //         </Section>
+  //         <Section title="See Your Changes">
+  //           <ReloadInstructions />
+  //         </Section>
+  //         <Section title="Debug">
+  //           <DebugInstructions />
+  //         </Section>
+  //         <Section title="Learn More">
+  //           Read the docs to discover what to do next:
+  //         </Section>
+  //         <LearnMoreLinks />
+  //       </View>
+  //     </ScrollView>
+  //   </SafeAreaView>
+  // );
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <>
+    <Button onPress={handleSavePress} title="save note" />
+    <Button onPress={ShowData} title="load data" />
+    <Text>{data}</Text>
+    </>
   );
 }
 
