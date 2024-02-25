@@ -6,7 +6,7 @@ export type Weight = {
   note: string | undefined;
 };
 
-const weights = database.collections.get('weights');
+export const weights = database.collections.get('weights');
 export const LastWeights = database.get('weights').query().fetch();
 
 export const observeWeights = () => weights.query().observe();

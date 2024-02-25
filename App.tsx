@@ -7,7 +7,7 @@
  * @format
  */
 
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Button,
@@ -28,8 +28,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { observeWeights, Weight, saveWeight,LastWeights } from './data/helper';
-
+import {NavigationContainer} from '@react-navigation/native';
+import {observeWeights, Weight, saveWeight, LastWeights} from './data/helper';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './components/Home';
+import Notification from './components/Notification';
+const Stack = createNativeStackNavigator();
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -61,30 +65,23 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
-  const [data, setData] = useState();
-  // const isDarkMode = useColorScheme() === 'dark';
+  // const [data, setData] = useState();
+  // // const isDarkMode = useColorScheme() === 'dark';
 
+  // const ShowData = async () => {
+  //   (await LastWeights).map(weights => {
+  //     setData(weights.note);
+  //     console.log(weights.note);
+  //   });
+  // };
 
-
-  const ShowData = async () => {
-  
-
-    (await LastWeights).map(weights => {
-      setData(weights.note);
-      console.log(weights.note)
-    })
-  }
-
-  const handleSavePress = async () => {
-    try{
-      await saveWeight({weight: "30", note: "slkdfj"});
-    }
-    catch(err){
-        console.error(err)
-    }
-   
-
-  }
+  // const handleSavePress = async () => {
+  //   try {
+  //     await saveWeight({weight: '30', note: 'slkdfj'});
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   // const backgroundStyle = {
   //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -124,12 +121,25 @@ function App(): React.JSX.Element {
   // );
   return (
     <>
-    <Button onPress={handleSavePress} title="save note" />
+      {/* <Button onPress={handleSavePress} title="save note" />
     <Button onPress={ShowData} title="load data" />
-    <Text>{data}</Text>
+    <Text>{data}</Text> */}
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
     </>
   );
 }
+const MyStack = () =>{
+  return (
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Notification" component={Notification} />
+      </Stack.Navigator>
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   sectionContainer: {

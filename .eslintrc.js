@@ -3,5 +3,6 @@ module.exports = {
   extends: '@react-native',
   rules: {
     'prettier/prettier' : 0,
+    'padded-blocks': 'off',
   },
 };
