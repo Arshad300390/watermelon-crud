@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, {useEffect, useState} from 'react';
 import {Button, StyleSheet, TextInput, View, Text} from 'react-native';
-import {observeWeights, saveWeight, LastWeights, weights} from '../data/helper';
+import {saveWeight, LastWeights, weights} from '../data/helper';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState({
@@ -9,7 +9,7 @@ const Home = ({navigation}) => {
     weight: null,
   });
 
-  const [weightData, setWeightData] = useState([]);
+  const [weightData, setWeightData] = useState();
 
   const changeHandler = (name, value) => {
     setData({...data, [name]: value});
@@ -28,7 +28,7 @@ const Home = ({navigation}) => {
   const viewData = async () => {
     try {
       (await LastWeights).map(weights => {
-        setWeightData(weights); // Set weight data to state
+        setWeightData(weights.note); // Set weight data to state
       });
     } catch (err) {
       console.error(err);
@@ -43,13 +43,7 @@ const Home = ({navigation}) => {
   return (
     <>
       <View>
-      {weightData.length > 0 ? (
-    weightData.map((weight, index) => (
-      <Text key={index}>{JSON.stringify(weight)}</Text>
-    ))
-  ) : (
-    <Text>No data available</Text>
-  )}
+        <Text>{weightData}</Text>
       </View>
       <TextInput
         style={styles.input}
