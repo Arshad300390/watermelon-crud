@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, TextInput, View, Text} from 'react-native';
-import {saveWeight, LastWeights, weights} from '../data/helper';
+import {
+  Button,
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  ScrollView,
+} from 'react-native';
+import {saveWeight, LastWeights, weights, deleteAll} from '../data/helper';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState({
@@ -9,17 +16,15 @@ const Home = ({navigation}) => {
     weight: null,
   });
 
-  const [weightData, setWeightData] = useState();
+  const [weightsData, setWeightsData] = useState<any>([]);
 
   const changeHandler = (name, value) => {
     setData({...data, [name]: value});
-    console.log(data);
   };
 
   const saveData = async () => {
     try {
       await saveWeight(data);
-      console.log(data);
     } catch (err) {
       console.error(err);
     }
@@ -27,12 +32,15 @@ const Home = ({navigation}) => {
 
   const viewData = async () => {
     try {
-      (await LastWeights).map(weights => {
-        setWeightData(weights.note); // Set weight data to state
-      });
+      const weightsCollection = await weights.query().fetch();
+      setWeightsData(weightsCollection);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const deleteAllw = async () => {
+    await deleteAll();
   };
 
   useEffect(() => {
@@ -42,9 +50,14 @@ const Home = ({navigation}) => {
 
   return (
     <>
-      <View>
-        <Text>{weightData}</Text>
-      </View>
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {weightsData.map((weight, index) => (
+        <View key={weight.id}>
+          <Text>{weight.id}</Text>
+          <Text>{weight.note}</Text>
+          <Text>{weight.weight}</Text>
+        </View>
+        ))}
       <TextInput
         style={styles.input}
         onChangeText={text => changeHandler('note', text)} // Pass 'note' as the name
@@ -64,10 +77,14 @@ const Home = ({navigation}) => {
       <View style={styles.button}>
         <Button title="view data" onPress={viewData} />
       </View>
+      <View style={styles.button}>
+        <Button title="Delete all data" onPress={deleteAllw} />
+      </View>
       <Button
         title="Go to Notifications"
         onPress={() => navigation.navigate('Notification')}
       />
+      </ScrollView>
     </>
   );
 };
@@ -86,6 +103,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 20, // Set the desired bottom margin value
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
 });
 
