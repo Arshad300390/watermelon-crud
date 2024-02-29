@@ -5,10 +5,11 @@ import {
   StyleSheet,
   TextInput,
   View,
-  Text,
   ScrollView,
 } from 'react-native';
-import {saveWeight, LastWeights, weights, deleteAll} from '../data/helper';
+import {saveWeight, weights, deleteAll, delById, update} from '../data/helper';
+import EnhancedWeight from './Weight';
+
 
 const Home = ({navigation}) => {
   const [data, setData] = useState({
@@ -42,7 +43,13 @@ const Home = ({navigation}) => {
   const deleteAllw = async () => {
     await deleteAll();
   };
+const delW = async (id)=>{
+await delById(id);
+};
 
+const updateW = async (id)=> {
+ await update(id);
+}
   useEffect(() => {
     // Call viewData when component mounts to load initial data
     viewData();
@@ -53,9 +60,8 @@ const Home = ({navigation}) => {
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {weightsData.map((weight, index) => (
         <View key={weight.id}>
-          <Text>{weight.id}</Text>
-          <Text>{weight.note}</Text>
-          <Text>{weight.weight}</Text>
+          {/* <Text>{weight.id} {weight.note} {weight.weight}</Text> */}
+          <EnhancedWeight weight={weight} handleSdel={() => delW(weight.id)} handleUpdate={()=> updateW(weight.id)}/>
         </View>
         ))}
       <TextInput
@@ -71,6 +77,7 @@ const Home = ({navigation}) => {
         placeholder="type number"
         keyboardType="numeric"
       />
+      
       <View style={styles.button}>
         <Button title="save data" onPress={saveData} />
       </View>
