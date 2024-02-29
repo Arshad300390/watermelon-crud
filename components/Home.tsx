@@ -49,7 +49,7 @@ await delById(id);
 
 const updateW = async (id)=> {
  await update(id);
-}
+};
   useEffect(() => {
     // Call viewData when component mounts to load initial data
     viewData();
@@ -77,7 +77,6 @@ const updateW = async (id)=> {
         placeholder="type number"
         keyboardType="numeric"
       />
-      
       <View style={styles.button}>
         <Button title="save data" onPress={saveData} />
       </View>

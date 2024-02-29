@@ -50,9 +50,8 @@ export const update = async (id) => {
   try {
     await database.write(async () => {
       const recordToUpdate = await database.get('weights').find(id);
-      console.log(recordToUpdate);
       await recordToUpdate.update(() => {
-        recordToUpdate.note = 'note is changed';
+        recordToUpdate.note = 'observer changed';
       });
     });
   } catch (error) {
